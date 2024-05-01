@@ -1,9 +1,9 @@
-const speedModule = require('./lib/speed.js');
-const latestModule = require('./lib/latest.js');
-const randomModule = require('./lib/random.js');
-const searchModule = require('./lib/search.js');
-const cleanModule = require('./lib/clean.js');
-const checkModule = require('./lib/check.js');
+import * as speedModule from './lib/speed.js'
+import * as latestModule from './lib/latest.js'
+import * as randomModule from './lib/random.js'
+import * as searchModule from './lib/search.js'
+import * as cleanModule from './lib/clean.js'
+import * as checkModule from './lib/check.js'
 
 module.exports = {
   mirror: speedModule.mirror,

@@ -1,0 +1,23 @@
+// Good
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+      "outDir": "./built",
+      "allowJs": true,
+      "target": "es5",
+      "allowUnreachableCode": false,
+      "noImplicitReturns": true,
+      "noImplicitAny": true,
+
+
+  },
+  "exclude": [
+    "./node_modules/**/*",
+    "./built/**/*",
+    "./test/**/*",
+  ],
+  "include": [
+      "./**/*"
+  ],
+  
+}

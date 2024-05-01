@@ -1,7 +1,7 @@
-const assert = require("assert").strict
+import { strict as assert } from "assert"
 
-const hasField = require("../../lib/check.js")
-const single = require("../json/single.json")
+import hasField from "../../lib/check.js"
+import single from "../json/single.json"
 
 describe("hasField", () => {
   it("should find 25 filled fields", () => {

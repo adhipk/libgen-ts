@@ -1,16 +1,16 @@
-const FSPersister = require('@pollyjs/persister-fs');
-const NodeHttpAdapter = require('@pollyjs/adapter-node-http');
-const path = require('path');
-const {Polly, setupMocha: setupPolly} = require('@pollyjs/core');
+import FSPersister from '@pollyjs/persister-fs';
+import NodeHttpAdapter from '@pollyjs/adapter-node-http';
+import { resolve } from 'path';
+import { Polly, setupMocha as setupPolly } from '@pollyjs/core';
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
-const assert = require('assert').strict;
-const getMirror = require('../../lib/speed.js').mirror;
-const hasField = require('../../lib/check.js');
-const latest = require('../../lib/latest.js');
-const random = require('../../lib/random.js');
-const search = require('../../lib/search.js');
+import { strict as assert } from 'assert';
+import { mirror as getMirror } from '../../lib/speed.js';
+import hasField from '../../lib/check.js';
+import { id, text } from '../../lib/latest.js';
+import random from '../../lib/random.js';
+import search from '../../lib/search.js';
 
 // get a working mirror and use that for the rest of the tests
 let mirror;
@@ -23,7 +23,7 @@ describe('async queries', () => {
     persister: 'fs',
     persisterOptions: {
       fs: {
-        recordingsDir: path.resolve(__dirname, 'recordings'),
+        recordingsDir: resolve(__dirname, 'recordings'),
       },
     },
     recordFailedRequests: true,
@@ -46,7 +46,7 @@ describe('async queries', () => {
   describe('latest.id', () => {
     it('should return a number over 1282650', async () => {
       try {
-        const data = await latest.id(mirror);
+        const data = await id(mirror);
 
         if (!parseInt(data)) assert(false, 'Returned a NaN');
 
@@ -63,7 +63,7 @@ describe('async queries', () => {
   describe('latest.text', () => {
     it('should return a JSON object', async () => {
       try {
-        const data = await latest.text(mirror);
+        const data = await text(mirror);
         assert.ok(data);
       } catch (err) {
         assert(false);
