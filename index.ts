@@ -1,20 +1,18 @@
-import * as speedModule from './lib/speed'
-import * as latestModule from './lib/latest'
+import {canDownload, mirror} from './lib/speed'
 
-import * as searchModule from './lib/search'
 
-import * as checkModule from './lib/check'
+import searchModule from './lib/search'
+
+import checkModule from './lib/check'
 
 export default {
-  mirror: speedModule.mirror,
-  latest: latestModule,
-
+  mirror: mirror,
   search: searchModule,
   utils: {
 
     check: {
       hasField: checkModule,
-      canDownload: speedModule.canDownload,
+      canDownload,
     },
   },
 };

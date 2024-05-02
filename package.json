@@ -1,6 +1,6 @@
 {
   "name": "@adhipkashyap/libgen-ts",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "The Library Genesis API (and more) for Node.js and now support typescript typing",
   "main": "built/index.js",
   "type":"module",
