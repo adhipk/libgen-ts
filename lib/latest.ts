@@ -6,7 +6,7 @@ import got from "got";
 // will break
 const LATEST_ID_REGEX = /<td>[0-9]+<\/td>/g
 
-export async function id(mirror) {
+export async function id(mirror:URL) {
   const url = `${mirror}/search.php?mode=last`;
 
   try {
@@ -25,7 +25,7 @@ export async function id(mirror) {
     return err;
   }
 }
-export async function text(mirror) {
+export async function text(mirror:URL) {
   try {
     const ids = await this.id(mirror);
     const url = `${mirror}/json.php?ids=${ids}&fields=*`;

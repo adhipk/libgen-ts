@@ -4,7 +4,10 @@
   "compilerOptions": {
       "outDir": "./built",
       "allowJs": true,
+      "declaration": true,
       "target": "es5",
+      "module": "es2020",
+      "moduleResolution":"node",
       "allowUnreachableCode": false,
       "noImplicitReturns": true,
       "noImplicitAny": true,
@@ -17,7 +20,8 @@
     "./test/**/*",
   ],
   "include": [
-      "./**/*"
+      "./**/*",
+      "./lib/**/*",
   ],
   
 }

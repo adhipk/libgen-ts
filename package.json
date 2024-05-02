@@ -1,11 +1,12 @@
 {
-  "name": "libgen-ts",
-  "version": "2.2.0",
+  "name": "@adhipkashyap/libgen-ts",
+  "version": "2.2.2",
   "description": "The Library Genesis API (and more) for Node.js and now support typescript typing",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "built/index.js",
+  "type":"module",
+  "types": "built/index.d.ts",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/**/*.js",
+    "test": "mocha test/**/*.js",
     "build": "tsc"
   },
   "keywords": [
@@ -14,11 +15,11 @@
     "books",
     "api"
   ],
-  "author": "Alex Dunn | Emmanuel Keifala| Adhip Kashyap",
+  "author": "Alex Dunn | Emmanuel Keifala | Adhip Kashyap",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EmmanuelKeifala/libgen-ts.git"
+    "url": "git+https://github.com/adhipk/libgen-ts.git"
   },
   "dependencies": {
     "got": "11.8.x",
@@ -30,5 +31,14 @@
     "@pollyjs/core": "6.0.6",
     "@pollyjs/persister-fs": "6.0.6",
     "mocha": "^10.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/adhipk/libgen-ts/issues"
+  },
+  "homepage": "https://github.com/adhipk/libgen-ts#readme",
+  "directories": {
+    "example": "examples",
+    "lib": "lib",
+    "test": "test"
   }
 }

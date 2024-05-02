@@ -1,4 +1,6 @@
-module.exports = [
+
+
+const mirrors = [
   {
     baseUrl: "http://gen.lib.rus.ec",
     canDownloadDirect: false
@@ -9,3 +11,4 @@ module.exports = [
     canDownloadDirect: true
   }
 ];
+export default mirrors;

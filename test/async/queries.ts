@@ -6,11 +6,11 @@ Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
 import { strict as assert } from 'assert';
-import { mirror as getMirror } from '../../lib/speed.js';
-import hasField from '../../lib/check.js';
-import { id, text } from '../../lib/latest.js';
-import random from '../../lib/random.js';
-import search from '../../lib/search.js';
+import { mirror as getMirror } from '../../lib/speed.ts';
+
+import { id, text } from '../../lib/latest.ts';
+
+import search from '../../lib/search.ts';
 
 // get a working mirror and use that for the rest of the tests
 let mirror;

@@ -1,11 +1,21 @@
+
 'use strict';
 
 import got from 'got';
+import { SearchResponse,ErrorResponse } from './types/results';
 
 const ID_REGEX = /ID\:[^0-9]+[0-9]+[^0-9]/g;
 const RESULT_REGEX = /[0-9]+\ files\ found/i;
-
-function extractIds(html) {
+type SearchOptions = {
+  mirror: string;
+  query: string;
+  count?: number;
+  offset?: number | string;
+  sort_by?: string;
+  search_in?: string;
+  reverse?: boolean;
+}
+function extractIds(html:string) {
   let ids = [];
   const idsResults = html.match(ID_REGEX);
   // reverse the order of the results because we walk through them
@@ -22,14 +32,14 @@ function extractIds(html) {
   return ids;
 }
 
-async function idFetch(options) {
+async function idFetch(options:SearchOptions) {
   if (!options.mirror)
     return new Error('No mirror provided to search function');
   else if (!options.query) return new Error('No search query given');
   else if (options.query.length < 4)
     return new Error('Search query must be at least four characters');
 
-  if (!options.count || !parseInt(options.count)) options.count = 10;
+  if (!options.count) options.count = 10;
 
   // Offsetting options. Ensure that the type of offset is number,
   // or string and add it to count value
@@ -78,15 +88,15 @@ async function idFetch(options) {
     const response = await got(query);
 
     let results = response.body.match(RESULT_REGEX);
+    let resultsString = response.body;
     if (results === null)
-      return new Error('Bad response: could not parse search results');
-    else results = results[0];
+      throw  Error('Bad response: could not parse search results');
+    else resultsString = results[0];
 
-    results = parseInt(results.replace(/^([0-9]*).*/, '$1'));
 
-    if (results === 0) return new Error(`No results for "${options.query}"`);
+    if (parseInt(resultsString.replace(/^([0-9]*).*/, '$1')) === 0) throw Error(`No results for "${options.query}"`);
     else if (!results)
-      return new Error('Could not determine # of search results');
+      throw Error('Could not determine # of search results');
 
     let searchIds = extractIds(response.body);
     if (!searchIds) return new Error('Failed to parse search results for IDs');
@@ -98,7 +108,7 @@ async function idFetch(options) {
     // so results, we have 50 results that get trimmed down. That is unnecessary and can be fixed.
     while (
       searchIds.length + 25 * (closestpage - 1) <
-      options.count + options.offset
+      options.count + localoffset
     ) {
       const query =
         options.mirror +
@@ -122,7 +132,7 @@ async function idFetch(options) {
 
         const newIds = extractIds(page.body);
 
-        if (!newIds) return new Error('Failed to parse search results for IDs');
+        if (!newIds) throw Error('Failed to parse search results for IDs');
         else searchIds = searchIds.concat(newIds);
       } catch (err) {
         return err;
@@ -131,15 +141,27 @@ async function idFetch(options) {
 
     return searchIds;
   } catch (err) {
-    return err;
+    const ret:ErrorResponse={
+      error:err.message,
+      code:'search',
+      message:'Failed to search for IDs'
+    }
+    return ret;
   }
 }
 
-export default async function (options) {
+export default async function (options:SearchOptions): Promise<SearchResponse> {
   try {
     // offset for results. Defaults to 0 to get all results.
     // Set to ensure that future results are agnostic of offset presence
     if (!options.offset) options.offset = options.offset || 0;
+    let localoffset = 0;
+
+    if (options.offset && typeof options.offset === 'number') {
+      localoffset = options.offset;
+    } else if (typeof options.offset === 'string') {
+      localoffset = parseInt(options.offset);
+    }
 
     let ids = await idFetch(options);
 
@@ -147,12 +169,12 @@ export default async function (options) {
     // Initial check ensures that the slicing is required
     if (ids.length > options.count) {
       // slicing differs between offset variants. If offset !== 0,
-      if (options.offset) {
+      if (localoffset) {
         // find the closest page to start at
-        const closestPage = Math.floor(options.offset / 25) + 1;
+        const closestPage = Math.floor(localoffset / 25) + 1;
         // and then calculate the offset from there.
         // So, for offset 30, we skip to page 2 and then offset 5 ids from top. We then select $count items
-        const start = options.offset - (closestPage - 1) * 25;
+        const start = localoffset - (closestPage - 1) * 25;
         ids = ids.slice(start, start + options.count);
       } else {
         // basic slicing only to trim off items from the end.
@@ -166,9 +188,14 @@ export default async function (options) {
       const response = await got(url);
       return JSON.parse(response.body);
     } catch (err) {
-      return err;
+      throw err;
     }
   } catch (err) {
-    return err;
+    const ret:ErrorResponse={
+      error:err.message,
+      code:'search',
+      message:'Failed to parse search results'
+    }
+    return ret;
   }
 };

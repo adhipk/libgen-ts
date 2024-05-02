@@ -1,22 +1,12 @@
-// index.d.ts
 
+// index.d.ts
+import type {RandomOptions, SearchOptions} from './lib/types/options';
 // Available mirrors information (replace with actual structure if different)
 interface MirrorInfo {
   baseUrl: string;
   canDownloadDirect: boolean; // Optional property if not all mirrors support direct download
 }
-type JSONValue =
-    | string
-    | number
-    | boolean
-    | JSONObject
-    | JSONArray
-    | null;
-interface JSONObject {
-  [x: string]: JSONValue;
-}
 
-interface JSONArray extends Array<JSONValue> { }
 declare namespace available_mirrors {
   export const mirrors: MirrorInfo[];
 }
@@ -38,25 +28,13 @@ declare module 'latest.js' {
 
 // Random module
 declare module 'random.js' {
-  export interface RandomOptions {
-    mirror: string;
-    count?: number;
-    fields?: string | string[];
-  }
+  
   export function text(options: RandomOptions): Promise<any[] | Error>;
 }
 
 // Search module
 declare module 'search.js' {
-  export interface SearchOptions {
-    mirror: string;
-    query: string;
-    count?: number;
-    offset?: number | string;
-    sort_by?: string;
-    search_in?: string;
-    reverse?: boolean;
-  }
+  
   export function search(options: SearchOptions): Promise<any[] | Error>;
 }
 
